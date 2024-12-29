@@ -13,22 +13,14 @@ pub fn laser_scan_to_yaml(scan: r2r::sensor_msgs::msg::LaserScan) -> String {
     yaml.push_str(&format!("scan_time: {}\n", scan.scan_time));
     yaml.push_str(&format!("range_min: {}\n", scan.range_min));
     yaml.push_str(&format!("range_max: {}\n", scan.range_max));
-    yaml.push_str(&format!(
-        "ranges: [{}]\n",
-        scan.ranges
-            .iter()
-            .map(|r| r.to_string())
-            .collect::<Vec<String>>()
-            .join(", ")
-    ));
-    yaml.push_str(&format!(
-        "intensities: [{}]\n",
-        scan.intensities
-            .iter()
-            .map(|i| i.to_string())
-            .collect::<Vec<String>>()
-            .join(", ")
-    ));
+    yaml.push_str(&format!("ranges:\n"));
+    for r in scan.ranges.iter() {
+        yaml.push_str(&format!("  - {}\n", r));
+    }
+    yaml.push_str(&format!("intensities:\n"));
+    for i in scan.intensities.iter() {
+        yaml.push_str(&format!("  - {}\n", i));
+    }
     yaml
 }
 
@@ -52,15 +44,10 @@ pub fn odometry_to_yaml(odom: r2r::nav_msgs::msg::Odometry) -> String {
     yaml.push_str(&format!("      y: {}\n", odom.pose.pose.orientation.y));
     yaml.push_str(&format!("      z: {}\n", odom.pose.pose.orientation.z));
     yaml.push_str(&format!("      w: {}\n", odom.pose.pose.orientation.w));
-    yaml.push_str(&format!(
-        "  covariance: [{}]\n",
-        odom.pose
-            .covariance
-            .iter()
-            .map(|c| c.to_string())
-            .collect::<Vec<String>>()
-            .join(", ")
-    ));
+    yaml.push_str(&format!("  covariance:\n"));
+    for c in odom.pose.covariance.iter() {
+        yaml.push_str(&format!("    - {}\n", c));
+    }
     yaml.push_str(&format!("twist:\n"));
     yaml.push_str(&format!("  twist:\n"));
     yaml.push_str(&format!("    linear:\n"));
@@ -71,14 +58,9 @@ pub fn odometry_to_yaml(odom: r2r::nav_msgs::msg::Odometry) -> String {
     yaml.push_str(&format!("      x: {}\n", odom.twist.twist.angular.x));
     yaml.push_str(&format!("      y: {}\n", odom.twist.twist.angular.y));
     yaml.push_str(&format!("      z: {}\n", odom.twist.twist.angular.z));
-    yaml.push_str(&format!(
-        "  covariance: [{}]\n",
-        odom.twist
-            .covariance
-            .iter()
-            .map(|c| c.to_string())
-            .collect::<Vec<String>>()
-            .join(", ")
-    ));
+    yaml.push_str(&format!("  covariance:\n"));
+    for c in odom.twist.covariance.iter() {
+        yaml.push_str(&format!("    - {}\n", c));
+    }
     yaml
 }
